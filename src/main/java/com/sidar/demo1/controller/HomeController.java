@@ -1,4 +1,4 @@
-package com.sidar.demo1;
+package com.sidar.demo1.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
