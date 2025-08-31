@@ -1,8 +1,12 @@
 package com.sidar.demo1.controller;
 
+import com.sidar.demo1.core.config.ModelMapperConfig;
+import com.sidar.demo1.dtos.UserSaveRequest;
 import com.sidar.demo1.entity.User;
 import com.sidar.demo1.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,23 +23,20 @@ public class UserController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return this.userRepository.findAll();
     }
 
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+    @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
+    public User createUser(@RequestBody UserSaveRequest userSaveRequest) {
+        User user1 = this.modelMapper.map(userSaveRequest, User.class);
+        return this.userRepository.save(user1);
     }
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    @GetMapping("/email/{email}")
-    public User getUserByEmail(@PathVariable String email) {
-        return userRepository.findByEmail(email).orElse(null);
+        return this.userRepository.findById(id).orElse(null);
     }
 }
